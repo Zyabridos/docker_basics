@@ -1,45 +1,35 @@
-# Имя workflow, которое будет отображаться в GitHub Actions
 name: push
 
-# Определяем, когда должен запускаться workflow
 on:
   push:
     branches:
-      - main  # Запуск при каждом `git push` в ветку `main`
+      - main
 
-# Определяем задание (job) с именем `push`
 jobs:
   push:
-    runs-on: ubuntu-latest  # Запускаем на последней версии Ubuntu
-
+    runs-on: ubuntu-latest
     steps:
-      # 1. Клонируем код репозитория
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2. Создаём `.env` файл из секретов GitHub
       - name: Create env file
         run: echo "${{ secrets.ENV_FILE }}" > .env
-
-      # 3. Запускаем тесты
+      
       - name: Run test
-        run: make test  # Использует команду `make test` из Makefile
+        run: make test
 
-      # 4. Настраиваем Docker Buildx (нужен для кэширования и сборки multi-arch образов)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      # 5. Логинимся в Docker Hub с использованием секретов GitHub
+      
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}  # Имя пользователя из GitHub Secrets
-          password: ${{ secrets.DOCKERHUB_TOKEN }}  # Токен доступа к Docker Hub
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 6. Собираем Docker-образ и отправляем его в Docker Hub
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          push: true  # Отправляем образ в Docker Hub
-          file: Dockerfile.production  # Используем Dockerfile.production
+          push: true
+          file: Dockerfile.production
           tags: zyabridos/docker_basics:latest  # Устанавливаем тег образа
