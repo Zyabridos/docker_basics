@@ -8,6 +8,7 @@ on:
 jobs:
   push:
     runs-on: ubuntu-latest
+    environment: DOCKERHUB_USERNAME
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,4 +38,4 @@ jobs:
         with:
           push: true
           file: Dockerfile.production
-          tags: zyabridos/docker_basics:latest  # Устанавливаем тег образа
+          tags: zyabridos/docker_basics:latest
