@@ -1,5 +1,5 @@
 setup:
-	docker-compose run --rm app make setup
+	docker-compose run --rm app npm install
 
 test:
 	docker-compose -f docker-compose.yml up --abort-on-container-exit --exit-code-from app
