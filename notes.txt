@@ -1,0 +1,4 @@
+Mac OS has problems with `:
+  docker run -it -w /root -v `pwd`/app:/root -p 8080:8080 node:20.12.2 make dev
+Therefore use: 
+  docker run -it -w /root -v "$(pwd)/app:/root" -p 8080:8080 node:20.12 make dev
